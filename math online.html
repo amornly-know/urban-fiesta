@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>แบบฝึกหัดบวกเลขเพิ่มทีละ 1 (ออนไลน์)</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            margin: 0;
+            padding: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            transition: background-image 0.5s ease-in-out;
+        }
+
+        /* ธีมภาพพื้นหลังท้องฟ้าที่ไม่ซ้ำกันในแต่ละชุด */
+        body.set-1 { background-image: url('https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=1600&auto=format&fit=crop'); } /* ท้องฟ้าใสยามเช้า */
+        body.set-2 { background-image: url('https://images.unsplash.com/photo-1509198397868-475647b2a1e5?q=80&w=1600&auto=format&fit=crop'); } /* ท้องฟ้ามีเมฆปุย */
+        body.set-3 { background-image: url('https://images.unsplash.com/photo-1513002749550-c59d786b8e6c?q=80&w=1600&auto=format&fit=crop'); } /* ท้องฟ้าสีฟ้าสดใส */
+        body.set-4 { background-image: url('https://images.unsplash.com/photo-1532184144673-424a41f4477c?q=80&w=1600&auto=format&fit=crop'); } /* ท้องฟ้าช่วงบ่ายเมฆสวย */
+        body.set-5 { background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600&auto=format&fit=crop'); } /* ท้องฟ้าบรรยากาศผ่อนคลาย */
+
+        .container {
+            max-width: 750px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 35px;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        h1 {
+            color: #ff6b81;
+            text-align: center;
+            margin-bottom: 5px;
+            font-size: 26px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #57606f;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+
+        .section-box { display: none; }
+        .section-box.active { display: block; }
+
+        h2 {
+            color: #2ed573;
+            border-bottom: 3px dashed #7bed9f;
+            padding-bottom: 8px;
+            margin-top: 10px;
+            font-size: 22px;
+        }
+
+        ol li {
+            margin-bottom: 12px;
+            font-size: 18px;
+            color: #2f3542;
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            width: 75px;
+            padding: 6px;
+            font-size: 18px;
+            text-align: center;
+            border: 2px solid #ced6e0;
+            border-radius: 10px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input[type="number"]:focus {
+            border-color: #ff4757;
+            box-shadow: 0 0 8px rgba(255, 71, 87, 0.3);
+        }
+
+        .btn-group {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .btn-check { background-color: #2ed573; }
+        .btn-check:hover { background-color: #26af5f; }
+
+        .btn-next { background-color: #ffa502; display: none; }
+        .btn-next:hover { background-color: #e58e26; }
+
+        .result {
+            font-weight: bold;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background-color: #f1f2f6;
+            color: #57606f;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 2px solid #dfe4ea;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .tab-btn.active {
+            background-color: #ff4757;
+            color: white;
+            border-color: #ff4757;
+            box-shadow: 0 4px 10px rgba(255, 71, 87, 0.3);
+        }
+    </style>
+</head>
+<body class="set-1">
+
+<div class="container">
+    <h1>🎈 แบบฝึกหัดบวกเลขเพิ่มทีละ 1 🎈</h1>
+    <p class="subtitle">ฝึกสมองวันละ 20 ข้อ เพลิดเพลินกับวิวท้องฟ้าสดใสครับ</p>
+
+    <!-- แถบเลือกชุดฝึกหัด -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchSet(1)">ชุดที่ 1</button>
+        <button class="tab-btn" onclick="switchSet(2)">ชุดที่ 2</button>
+        <button class="tab-btn" onclick="switchSet(3)">ชุดที่ 3</button>
+        <button class="tab-btn" onclick="switchSet(4)">ชุดที่ 4</button>
+        <button class="tab-btn" onclick="switchSet(5)">ชุดที่ 5</button>
+    </div>
+
+    <!-- ชุดที่ 1 -->
+    <div id="set-1" class="section-box active">
+        <h2>🌈 ชุดที่ 1 (ข้อ 1 - 20)</h2>
+        <ol>
+            <li>1 + 1 = <input type="number" data-answer="2"><span class="result"></span></li>
+            <li>2 + 1 = <input type="number" data-answer="3"><span class="result"></span></li>
+            <li>3 + 1 = <input type="number" data-answer="4"><span class="result"></span></li>
+            <li>4 + 1 = <input type="number" data-answer="5"><span class="result"></span></li>
+            <li>5 + 1 = <input type="number" data-answer="6"><span class="result"></span></li>
+            <li>6 + 1 = <input type="number" data-answer="7"><span class="result"></span></li>
+            <li>7 + 1 = <input type="number" data-answer="8"><span class="result"></span></li>
+            <li>8 + 1 = <input type="number" data-answer="9"><span class="result"></span></li>
+            <li>9 + 1 = <input type="number" data-answer="10"><span class="result"></span></li>
+            <li>10 + 1 = <input type="number" data-answer="11"><span class="result"></span></li>
+            <li>11 + 1 = <input type="number" data-answer="12"><span class="result"></span></li>
+            <li>12 + 1 = <input type="number" data-answer="13"><span class="result"></span></li>
+            <li>13 + 1 = <input type="number" data-answer="14"><span class="result"></span></li>
+            <li>14 + 1 = <input type="number" data-answer="15"><span class="result"></span></li>
+            <li>15 + 1 = <input type="number" data-answer="16"><span class="result"></span></li>
+            <li>16 + 1 = <input type="number" data-answer="17"><span class="result"></span></li>
+            <li>17 + 1 = <input type="number" data-answer="18"><span class="result"></span></li>
+            <li>18 + 1 = <input type="number" data-answer="19"><span class="result"></span></li>
+            <li>19 + 1 = <input type="number" data-answer="20"><span class="result"></span></li>
+            <li>20 + 1 = <input type="number" data-answer="21"><span class="result"></span></li>
+        </ol>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkAnswers(1)">✨ ตรวจคำตอบ</button>
+            <button id="next-btn-1" class="btn-next" onclick="switchSet(2)">ไปชุดถัดไป 🚀</button>
+        </div>
+    </div>
+
+    <!-- ชุดที่ 2 -->
+    <div id="set-2" class="section-box">
+        <h2>☁️ ชุดที่ 2 (ข้อ 21 - 40)</h2>
+        <ol start="21">
+            <li>21 + 1 = <input type="number" data-answer="22"><span class="result"></span></li>
+            <li>22 + 1 = <input type="number" data-answer="23"><span class="result"></span></li>
+            <li>23 + 1 = <input type="number" data-answer="24"><span class="result"></span></li>
+            <li>24 + 1 = <input type="number" data-answer="25"><span class="result"></span></li>
+            <li>25 + 1 = <input type="number" data-answer="26"><span class="result"></span></li>
+            <li>26 + 1 = <input type="number" data-answer="27"><span class="result"></span></li>
+            <li>27 + 1 = <input type="number" data-answer="28"><span class="result"></span></li>
+            <li>28 + 1 = <input type="number" data-answer="29"><span class="result"></span></li>
+            <li>29 + 1 = <input type="number" data-answer="30"><span class="result"></span></li>
+            <li>30 + 1 = <input type="number" data-answer="31"><span class="result"></span></li>
+            <li>31 + 1 = <input type="number" data-answer="32"><span class="result"></span></li>
+            <li>32 + 1 = <input type="number" data-answer="33"><span class="result"></span></li>
+            <li>33 + 1 = <input type="number" data-answer="34"><span class="result"></span></li>
+            <li>34 + 1 = <input type="number" data-answer="35"><span class="result"></span></li>
+            <li>35 + 1 = <input type="number" data-answer="36"><span class="result"></span></li>
+            <li>36 + 1 = <input type="number" data-answer="37"><span class="result"></span></li>
+            <li>37 + 1 = <input type="number" data-answer="38"><span class="result"></span></li>
+            <li>38 + 1 = <input type="number" data-answer="39"><span class="result"></span></li>
+            <li>39 + 1 = <input type="number" data-answer="40"><span class="result"></span></li>
+            <li>40 + 1 = <input type="number" data-answer="41"><span class="result"></span></li>
+        </ol>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkAnswers(2)">✨ ตรวจคำตอบ</button>
+            <button id="next-btn-2" class="btn-next" onclick="switchSet(3)">ไปชุดถัดไป 🚀</button>
+        </div>
+    </div>
+
+    <!-- ชุดที่ 3 -->
+    <div id="set-3" class="section-box">
+        <h2>⛅ ชุดที่ 3 (ข้อ 41 - 60)</h2>
+        <ol start="41">
+            <li>41 + 1 = <input type="number" data-answer="42"><span class="result"></span></li>
+            <li>42 + 1 = <input type="number" data-answer="43"><span class="result"></span></li>
+            <li>43 + 1 = <input type="number" data-answer="44"><span class="result"></span></li>
+            <li>44 + 1 = <input type="number" data-answer="45"><span class="result"></span></li>
+            <li>45 + 1 = <input type="number" data-answer="46"><span class="result"></span></li>
+            <li>46 + 1 = <input type="number" data-answer="47"><span class="result"></span></li>
+            <li>47 + 1 = <input type="number" data-answer="48"><span class="result"></span></li>
+            <li>48 + 1 = <input type="number" data-answer="49"><span class="result"></span></li>
+            <li>49 + 1 = <input type="number" data-answer="50"><span class="result"></span></li>
+            <li>50 + 1 = <input type="number" data-answer="51"><span class="result"></span></li>
+            <li>51 + 1 = <input type="number" data-answer="52"><span class="result"></span></li>
+            <li>52 + 1 = <input type="number" data-answer="53"><span class="result"></span></li>
+            <li>53 + 1 = <input type="number" data-answer="54"><span class="result"></span></li>
+            <li>54 + 1 = <input type="number" data-answer="55"><span class="result"></span></li>
+            <li>55 + 1 = <input type="number" data-answer="56"><span class="result"></span></li>
+            <li>56 + 1 = <input type="number" data-answer="57"><span class="result"></span></li>
+            <li>57 + 1 = <input type="number" data-answer="58"><span class="result"></span></li>
+            <li>58 + 1 = <input type="number" data-answer="59"><span class="result"></span></li>
+            <li>59 + 1 = <input type="number" data-answer="60"><span class="result"></span></li>
+            <li>60 + 1 = <input type="number" data-answer="61"><span class="result"></span></li>
+        </ol>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkAnswers(3)">✨ ตรวจคำตอบ</button>
+            <button id="next-btn-3" class="btn-next" onclick="switchSet(4)">ไปชุดถัดไป 🚀</button>
+        </div>
+    </div>
+
+    <!-- ชุดที่ 4 -->
+    <div id="set-4" class="section-box">
+        <h2>☀️ ชุดที่ 4 (ข้อ 61 - 80)</h2>
+        <ol start="61">
+            <li>61 + 1 = <input type="number" data-answer="62"><span class="result"></span></li>
+            <li>62 + 1 = <input type="number" data-answer="63"><span class="result"></span></li>
+            <li>63 + 1 = <input type="number" data-answer="64"><span class="result"></span></li>
+            <li>64 + 1 = <input type="number" data-answer="65"><span class="result"></span></li>
+            <li>65 + 1 = <input type="number" data-answer="66"><span class="result"></span></li>
+            <li>66 + 1 = <input type="number" data-answer="67"><span class="result"></span></li>
+            <li>67 + 1 = <input type="number" data-answer="68"><span class="result"></span></li>
+            <li>68 + 1 = <input type="number" data-answer="69"><span class="result"></span></li>
+            <li>69 + 1 = <input type="number" data-answer="70"><span class="result"></span></li>
+            <li>70 + 1 = <input type="number" data-answer="71"><span class="result"></span></li>
+            <li>71 + 1 = <input type="number" data-answer="72"><span class="result"></span></li>
+            <li>72 + 1 = <input type="number" data-answer="73"><span class="result"></span></li>
+            <li>73 + 1 = <input type="number" data-answer="74"><span class="result"></span></li>
+            <li>74 + 1 = <input type="number" data-answer="75"><span class="result"></span></li>
+            <li>75 + 1 = <input type="number" data-answer="76"><span class="result"></span></li>
+            <li>76 + 1 = <input type="number" data-answer="77"><span class="result"></span></li>
+            <li>77 + 1 = <input type="number" data-answer="78"><span class="result"></span></li>
+            <li>78 + 1 = <input type="number" data-answer="79"><span class="result"></span></li>
+            <li>79 + 1 = <input type="number" data-answer="80"><span class="result"></span></li>
+            <li>80 + 1 = <input type="number" data-answer="81"><span class="result"></span></li>
+        </ol>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkAnswers(4)">✨ ตรวจคำตอบ</button>
+            <button id="next-btn-4" class="btn-next" onclick="switchSet(5)">ไปชุดถัดไป 🚀</button>
+        </div>
+    </div>
+
+    <!-- ชุดที่ 5 -->
+    <div id="set-5" class="section-box">
+        <h2>🌅 ชุดที่ 5 (ข้อ 81 - 99)</h2>
+        <ol start="81">
+            <li>81 + 1 = <input type="number" data-answer="82"><span class="result"></span></li>
+            <li>82 + 1 = <input type="number" data-answer="83"><span class="result"></span></li>
+            <li>83 + 1 = <input type="number" data-answer="84"><span class="result"></span></li>
+            <li>84 + 1 = <input type="number" data-answer="85"><span class="result"></span></li>
+            <li>85 + 1 = <input type="number" data-answer="86"><span class="result"></span></li>
+            <li>86 + 1 = <input type="number" data-answer="87"><span class="result"></span></li>
+            <li>87 + 1 = <input type="number" data-answer="88"><span class="result"></span></li>
+            <li>88 + 1 = <input type="number" data-answer="89"><span class="result"></span></li>
+            <li>89 + 1 = <input type="number" data-answer="90"><span class="result"></span></li>
+            <li>90 + 1 = <input type="number" data-answer="91"><span class="result"></span></li>
+            <li>91 + 1 = <input type="number" data-answer="92"><span class="result"></span></li>
+            <li>92 + 1 = <input type="number" data-answer="93"><span class="result"></span></li>
+            <li>93 + 1 = <input type="number" data-answer="94"><span class="result"></span></li>
+            <li>94 + 1 = <input type="number" data-answer="95"><span class="result"></span></li>
+            <li>95 + 1 = <input type="number" data-answer="96"><span class="result"></span></li>
+            <li>96 + 1 = <input type="number" data-answer="97"><span class="result"></span></li>
+            <li>97 + 1 = <input type="number" data-answer="98"><span class="result"></span></li>
+            <li>98 + 1 = <input type="number" data-answer="99"><span class="result"></span></li>
+            <li>99 + 1 = <input type="number" data-answer="100"><span class="result"></span></li>
+        </ol>
+        <div class="btn-group">
+            <button class="btn-check" onclick="checkAnswers(5)">✨ ตรวจคำตอบ</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchSet(setNum) {
+        document.querySelectorAll('.section-box').forEach(box => box.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        
+        document.getElementById('set-' + setNum).classList.add('active');
+        document.querySelectorAll('.tab-btn')[setNum - 1].classList.add('active');
+        
+        // เปลี่ยนภาพพื้นหลังท้องฟ้าไม่ซ้ำกันตามชุด
+        document.body.className = 'set-' + setNum;
+        window.scrollTo(0, 0);
+    }
+
+    function checkAnswers(setNum) {
+        const container = document.getElementById('set-' + setNum);
+        const inputs = container.querySelectorAll('input');
+        let allFilled = true;
+        let allCorrect = true;
+        
+        inputs.forEach(input => {
+            if (input.value.trim() === '') {
+                allFilled = false;
+            }
+        });
+
+        if (!allFilled) {
+            alert('⚠️ กรุณากรอกคำตอบให้ครบทุกข้อก่อนตรวจคำตอบนะคะ!');
+            return;
+        }
+
+        inputs.forEach(input => {
+            const userVal = input.value.trim();
+            const correctVal = input.getAttribute('data-answer');
+            const span = input.nextElementSibling;
+            
+            if (userVal === correctVal) {
+                span.textContent = ' ✅ ถูกต้อง';
+                span.style.color = '#2ed573';
+            } else {
+                span.textContent = ' ❌ (ที่ถูกคือ ' + correctVal + ')';
+                span.style.color = '#ff4757';
+                allCorrect = false;
+            }
+        });
+
+        const nextBtn = document.getElementById('next-btn-' + setNum);
+        if (allCorrect) {
+            alert('🎉 เก่งมากๆ เลยจ้า! ตอบถูกทั้งหมดทุกข้อแล้ว ไปลุยชุดถัดไปกันเลย!');
+            if (nextBtn) {
+                nextBtn.style.display = 'inline-block';
+            }
+        } else {
+            alert('💪 มีบางข้อที่ยังไม่ถูกต้อง ลองตรวจทานดูใหม่อีกนิดนะ สู้ๆ!');
+            if (nextBtn) {
+                nextBtn.style.display = 'none';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
